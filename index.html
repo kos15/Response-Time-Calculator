@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .title {
+            display: flex;
+            position: relative;
+            color: red;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .score {
+            display: flex;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+    </style>
+    <title>Reaction Time Calculator</title>
+</head>
+
+<body>
+
+    <div class="title" id="title">Reaction Time Calculator</div>
+    <div class="score">Click on the shape to calculate time</div>
+    <div class="score" id="score"></div>
+    <script>
+        var score = document.getElementById('score');
+        score.innerHTML = 'Time: 0.0s';
+
+        var colorList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F'];
+        var size = Math.floor(Math.random() * 200);
+        var screenHeight = screen.availHeight - 200;
+        var screenWidth = screen.availWidth - 200;
+        var shape = document.createElement('div');
+        var time = new Date().getTime();
+        function createShape() {
+            var color = `#${colorList[Math.floor(Math.random() * 15)]}${colorList[Math.floor(Math.random() * 15)]}${colorList[Math.floor(Math.random() * 15)]}`;
+
+            // Styling shape
+            shape.style.backgroundColor = color;
+            shape.style.height = `${size < 40 ? 40 : size}px`;
+            shape.style.width = `${size < 40 ? 40 : size}px`;
+            shape.style.position = 'relative';
+            shape.style.borderRadius = Math.random() > 0.5 ? '0px' : '100px';
+            shape.style.top = `${(screenHeight - Math.floor(Math.random() * screenHeight))}px`;
+            shape.style.left = `${(screenWidth - Math.floor(Math.random() * screenWidth))}px`;
+            shape.addEventListener('click', captureTime);
+            // injecting element
+            document.body.appendChild(shape);
+        }
+
+        function updateShape() {
+            setTimeout(() => {
+                time = new Date().getTime();
+                createShape();
+            }, 2000);
+        }
+
+        function captureTime() {
+            console.log('capture time')
+            let reactionTime = (new Date().getTime() - time)/1000;
+            let reaction = reactionTime > 2 ? 'slow' : reactionTime < 1 ? 'fast' : 'normal'
+            score.innerHTML = `Time: ${reactionTime} ${reaction}`;
+            updateShape();
+        }
+
+        updateShape();
+
+    </script>
+</body>
+
+</html>
